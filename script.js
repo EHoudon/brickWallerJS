@@ -10,7 +10,7 @@ const ballRadius = 10;
 const paddleHeight = 10;
 const paddleWidth = 150;
 let paddleX = (canvas.width - paddleWidth) / 2;
-let paddleY = canvas.height - (paddleHeight + 60)
+let paddleY = canvas.height - (paddleHeight + 60);
 let rightPressed = false;
 let leftPressed = false;
 const brickRowCount = 3;
@@ -21,7 +21,7 @@ const brickPadding = 10;
 const brickOffsetTop = 30;
 const brickOffsetLeft = 30;
 const brickOffsetRight = 30;
-let speed= 1;
+let speed = 1;
 let score = 0;
 document.addEventListener('keydown', keyDownHandler, false);
 document.addEventListener('keyup', keyUpHandler, false);
@@ -103,7 +103,7 @@ function draw() {
 		if (x > paddleX && x < paddleX + paddleWidth) {
 			dy = -dy;
 		}
-		if(y > (paddleY + 40) && y < (paddleY + paddleHeight + 40)) {
+		if (y > (paddleY + 40) && y < (paddleY + paddleHeight + 40)) {
 			alert('GAME OVER');
 			document.location.reload();
 			clearInterval(interval); // Needed for Chrome to end game
@@ -140,9 +140,14 @@ function collisionDetection() {
 					dy = -dy;
 					b.status = 0;
 					score++;
-					speed += score * 0.01;
+					if (score < 6) {
+						speed += score * 0.01;
+					} else {
+						speed += score * 0.001;
+					}
+					appendImage();
 					if (score === brickRowCount * brickColumnCount) {
-						alert("YOU WIN, CONGRATULATIONS!");
+						alert('YOU WIN, CONGRATULATIONS!');
 						document.location.reload();
 						clearInterval(interval); // Needed for Chrome to end game
 					}
@@ -151,9 +156,20 @@ function collisionDetection() {
 		}
 	}
 }
+
 function drawScore() {
-	ctx.font = "16px Arial";
-	ctx.fillStyle = "#0095DD";
+	ctx.font = '16px Arial';
+	ctx.fillStyle = '#0095DD';
 	ctx.fillText(`Score: ${score}`, 8, 20);
 }
+
+let rainDiv = document.querySelector('#action');
+
+function appendImage() {
+	let img = document.createElement('img');
+	img.setAttribute('src', 'http://pixelartmaker.com/art/3ba7f5717ac3c63.png');
+	img.style.left = Math.floor(Math.random() * 100) + 'vw';
+	rainDiv.appendChild(img);
+}
+
 const interval = setInterval(draw, 10);
